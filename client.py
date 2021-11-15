@@ -38,7 +38,10 @@ class Client:
 
             # Verify that the actual user and the destinatary is the same
             # only if it is the message display on the UI
-            if mess.destinatary == self.username:
+            if (mess.sender == self.username):
+                self.chat_list.insert(END, "[{}] {}\n".format(mess.sender, mess.message)) 
+
+            if (mess.destinatary == self.username):
                 print("New message from: [{}]".format(mess.sender))
                 self.chat_list.insert(END, "[{}] {}\n".format(mess.sender, mess.message)) 
 
@@ -59,36 +62,37 @@ class Client:
             self.conn.SendMessage(n)
 
     def __setup_ui(self):
-        self.chat_list = Text()
-        self.chat_list.grid(row=3, column=0, columnspan=4)
-
-        self.lbl_username = Label(self.window, text=self.username)
-        self.lbl_username.grid(row=0, column=0, columnspan=4)
+        self.lbl_username = Label(self.window, text='Usuario: '+self.username)
+        self.lbl_username.grid(row=0, column=0, columnspan=3)
 
         self.lbl_destinatary = Label(self.window, text='Destinatario: ')
-        self.lbl_destinatary.grid(row=1, column=0, columnspan=2)
+        self.lbl_destinatary.grid(row=1, column=0, columnspan=1)
         
         self.entry_destinatary = Entry(self.window, bd=5)
         self.entry_destinatary.focus()
         self.entry_destinatary.grid(row=1, column=2, columnspan=2)
 
         self.lbl_message = Label(self.window, text='Mensaje: ')
-        self.lbl_message.grid(row=2, column=0, columnspan=2)
+        self.lbl_message.grid(row=2, column=0, columnspan=1)
 
         self.entry_message = Entry(self.window, bd=5)
         self.entry_message.bind('<Return>', self.send_message)
         self.entry_message.focus()
         self.entry_message.grid(row=2, column=2, columnspan=2)
 
+        self.chat_list = Text()
+        self.chat_list.grid(row=3, column=0, columnspan=3)
+
 if __name__ == '__main__':
     root = Tk()
-    frame = Frame(root, width=300, height=300)
+    frame = Frame(root, width=100, height=150)
     frame.grid()
     root.withdraw()
+    root.title('Chat')
     username = None
 
     while username is None:
-        username = simpledialog.askstring("Nombre de Usuario", "Ingrese su nombre de usuario", parent=root)
+        username = simpledialog.askstring("Registro", "Ingrese su nombre de usuario", parent=root)
 
     root.deiconify()
 
